@@ -2,7 +2,7 @@ name: ksir
 description: A new flutter plugin project.
 version: 0.0.1
 author: debugksir
-homepage:
+homepage: https://github.com/debugksir/Ksir
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
