@@ -11,11 +11,6 @@ dependencies:
   flutter:
     sdk: flutter
   cached_network_image: ^2.2.0
-  loading: ^1.0.2
-    # git:
-    #   url: git://github.com/leonzone/loading.git
-    #   path: loading
-    #   ref: 8f5a63f
 
 dev_dependencies:
   flutter_test:

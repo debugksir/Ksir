@@ -2,10 +2,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:ksir/src/indicator.dart';
+import 'package:ksir/src/indicator/ball_spin_fade_loader_indicator.dart';
+import 'package:ksir/src/loading.dart';
 import 'package:ksir/src/screenAdaptation.dart';
 import 'package:ksir/src/showDralog.dart';
-import 'package:loading/indicator/ball_beat_indicator.dart';
-import 'package:loading/loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 /// 设置设备上的尺寸计算设计稿的尺寸
@@ -51,14 +52,33 @@ class Ksir {
   }
 
   /// showLoading
-  static void showLoading() {
+  static void showLoading({
+    Indicator iconType,
+  }) {
     customShowDialog(
       context: globalContext,
-      barrierColor: Color(0x44fffffff),
       barrierDismissible: false,
-      builder: (context) {
-        return Center(
-          child: Loading(indicator: BallBeatIndicator(), color: Color(0xff000000), size: setSize(36),),
+      barrierColor: Color(0x00ffffff),
+      builder: (BuildContext context) {
+        return CustomDialog(
+          backgroundColor: Color(0x88000000),
+          minWidth: 40,
+          minHeight: 40,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(setSize(12))
+          ),
+          elevation: 0,
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Loading(indicator: iconType??BallSpinFadeLoaderIndicator(), color: Color(0xffffffff), size: setSize(54),),
+              ]
+            )
+          )
         );
       }
     );
@@ -404,18 +424,17 @@ class Ksir {
               )
             ),
           ),
-          for(var i = 0; i < options.length; i++) options[i].isShow??true ? MaterialButton(
-            onPressed: () {
+          for(var i = 0; i < options.length; i++) options[i].isShow??true ? GestureDetector(
+            onTap: () {
               (options[i].onTap??()=>{})();
               if(Navigator.canPop(context)) {
                 Navigator.pop(context);
               }
             },
-            padding: EdgeInsets.all(0),
-            color: Colors.white,
             child: Container(
               height: setSize(90),
               decoration: BoxDecoration(
+                color: Colors.white,
                 border: Border(
                   bottom: BorderSide(
                     color: i == options.length-1 ? Colors.transparent : Color(0xffe2e2e2),
@@ -438,18 +457,14 @@ class Ksir {
             height: setSize(20),
             color: Color(0xfff8f8f8),
           ),
-          MaterialButton(
-            onPressed: () {
+          GestureDetector(
+            onTap: () {
               Navigator.pop(context);
             },
-            shape: BeveledRectangleBorder(
-              side: BorderSide(width: 0, color: Colors.transparent)
-            ),
-            color: Colors.white,
-            padding: EdgeInsets.all(0),
             child: Container(
               height: setSize(90),
               alignment: Alignment.center,
+              color: Colors.white,
               child: Text(
                 '取消',
                 style: TextStyle(
@@ -471,9 +486,9 @@ class Ksir {
   /// picker
   /// 
   static void picker({
-    @required List<String> options,
+    @required List<PickerType> options,
     String title: '',
-    int defaultIndex: 0,
+    dynamic defaultValue: 0,
     Function onChange,
     Function onCancel,
     Function onConfirm,
@@ -482,11 +497,20 @@ class Ksir {
     Color cancelColor,
     Color confirmColor,
     TextStyle optionTextStyle,
+    TextStyle titleTextStyle,
     double optionsHeight: 300,
     double optionHeight: 60,
     bool closeAble: true,
   }) {
-    int pickIndex = defaultIndex;
+    int workIndex(List<PickerType> data, dynamic value) {
+      for(int i = 0; i < data.length; i++) {
+        if (data[i].value == value) {
+          return i;
+        }
+      }
+      return 0;
+    }
+    int pickIndex = workIndex(options, defaultValue);
     FixedExtentScrollController pickScrollCtr = new FixedExtentScrollController(initialItem: pickIndex);
     // pickScrollCtrA.animateToItem(currentPosition, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
     showModalBottomSheet(
@@ -523,7 +547,7 @@ class Ksir {
                     },
                     child: Text(cancelTitle, style: TextStyle(color: confirmColor??Color(0xff999999), fontSize: setSize(28))),
                   ) : SizedBox(width: setSize(60),),
-                  Text(title, style: TextStyle(fontSize: setSize(32), color: Color(0xff333333)),),
+                  Text(title, style: titleTextStyle??TextStyle(fontSize: setSize(32), color: Color(0xff333333)),),
                   GestureDetector(
                     onTap: (){
                       (onConfirm??()=> {})(pickIndex, options[pickIndex]);
@@ -569,7 +593,7 @@ class Ksir {
                             children: <Widget>[
                               for(int i = 0; i < options.length; i++) Container(
                                 alignment: Alignment.center,
-                                child: Text(options[i], style: optionTextStyle??TextStyle(fontSize: setSize(28), color: Color(0xff666666)),),
+                                child: Text(options[i].label, style: optionTextStyle??TextStyle(fontSize: setSize(28), color: Color(0xff666666)),),
                               ),
                             ],
                           )
@@ -594,4 +618,9 @@ class ActionSheetType {
   final Color color;
   final bool isShow;
   ActionSheetType({@required this.title,  this.onTap, this.color, this.isShow});
+}
+class PickerType {
+  final String label;
+  final dynamic value;
+  PickerType({@required this.label, @required this.value});
 }
