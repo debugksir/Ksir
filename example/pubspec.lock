@@ -147,11 +147,9 @@ packages:
   loading:
     dependency: transitive
     description:
-      path: loading
-      ref: "8f5a63f"
-      resolved-ref: "8f5a63fff48d371ff4de96865861c5c24f58f7b5"
-      url: "git://github.com/leonzone/loading.git"
-    source: git
+      name: loading
+      url: "https://pub.flutter-io.cn"
+    source: hosted
     version: "1.0.2"
   matcher:
     dependency: transitive

@@ -109,17 +109,50 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Ksir.text('showLoading'),
                 ),
+                MaterialButton(
+                  color: Colors.blue[200],
+                  onPressed: () {
+                    Ksir.actionSheet([
+                      ActionSheetType(title: '修改', onTap: () {
+                        print('修改');
+                      }),
+                      ActionSheetType(title: '删除', onTap: () {
+                        print('删除');
+                      }, color: Colors.red),
+                    ]);
+                  },
+                  child: Ksir.text('showAction'),
+                ),
+                MaterialButton(
+                  color: Colors.blue[200],
+                  onPressed: () {
+                    Ksir.picker(
+                      options: ['北京', '上海', '广州', '杭州', '北京', '上海', '广州', '杭州', '北京', '上海', '广州', '杭州', '北京', '上海', '广州', '杭州', '北京', '上海', '广州', '杭州', ], 
+                      title: '请选择',
+                      optionHeight: 80,
+                      optionTextStyle: TextStyle(fontSize: 14, color: Colors.blueAccent),
+                      defaultIndex: 3,
+                      onChange: (index, item) {
+                        print('$index : $item');
+                      },
+                      onConfirm: (index, item) {
+                        print('$index : $item');
+                      }
+                    );
+                  },
+                  child: Ksir.text('showPicker'),
+                ),
                 Ksir.image('http://via.placeholder.com/350x150', width: 500, height: 500, fit: BoxFit.cover),
-                SizedBox(height: Ksir.setSize(30),),
+                SizedBox(height: setSize(30),),
                 Ksir.avatar('http://via.placeholder.com/350x150', width: 200),
-                SizedBox(height: Ksir.setSize(30),),
+                SizedBox(height: setSize(30),),
                 Ksir.nextPage(),
-                SizedBox(height: Ksir.setSize(30),),
+                SizedBox(height: setSize(30),),
                 Ksir.goBack(context),
-                SizedBox(height: Ksir.setSize(30),),
+                SizedBox(height: setSize(30),),
                 Container(
-                  width: Ksir.setSize(600),
-                  height: Ksir.setSize(450),
+                  width: setSize(600),
+                  height: setSize(450),
                   color: Colors.blueGrey,
                 )
               ],

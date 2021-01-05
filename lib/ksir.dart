@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:ksir/src/screenAdaptation.dart';
@@ -6,6 +7,31 @@ import 'package:ksir/src/showDralog.dart';
 import 'package:loading/indicator/ball_beat_indicator.dart';
 import 'package:loading/loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
+/// 设置设备上的尺寸计算设计稿的尺寸
+setSize(double rpx) => Screen.getIst().setSize(rpx);
+/// 根据设计稿尺寸计算设备上的尺寸
+sizeSet(double xpr) => Screen.getIst().sizeSet(xpr);
+/// 底部操作栏高度
+bottomBarHeight() => Screen.bottomBarHeight;
+///每个逻辑像素的字体像素数，字体的缩放比例
+textScaleFactory() => Screen.textScaleFactory;
+///设备的像素密度
+pixelRatio() => Screen.pixelRatio;
+///当前设备宽度 dp
+screenWidthDp() => Screen.screenWidthDp;
+///当前设备高度 dp
+screenHeightDp() => Screen.screenHeightDp;
+///当前设备宽度 px
+screenWidth() => Screen.screenWidth;
+///当前设备高度 px
+screenHeight() => Screen.screenHeight;
+///状态栏高度 dp 刘海屏会更高
+statusBarHeight() => Screen.statusBarHeight;
+/// 设置最大宽度
+setFullWidth() => MediaQuery.of(globalContext).size.width;
+/// 设置最大高度
+setFullHeight() => MediaQuery.of(globalContext).size.height;
 
 BuildContext globalContext;
 class Ksir {
@@ -23,32 +49,6 @@ class Ksir {
     Screen.instance = Screen.getIst()..init();
     Screen.instance.width = width;
   }
-
-
-  /// 设置设备上的尺寸计算设计稿的尺寸
-  static setSize(double rpx) => Screen.getIst().setSize(rpx);
-  /// 根据设计稿尺寸计算设备上的尺寸
-  static sizeSet(double xpr) => Screen.getIst().sizeSet(xpr);
-  /// 底部操作栏高度
-  static bottomBarHeight() => Screen.bottomBarHeight;
-  ///每个逻辑像素的字体像素数，字体的缩放比例
-  static textScaleFactory() => Screen.textScaleFactory;
-  ///设备的像素密度
-  static double get pixelRatio => Screen.pixelRatio;
-  ///当前设备宽度 dp
-  static double get screenWidthDp => Screen.screenWidthDp;
-  ///当前设备高度 dp
-  static double get screenHeightDp => Screen.screenHeightDp;
-  ///当前设备宽度 px
-  static double get screenWidth => Screen.screenWidth;
-  ///当前设备高度 px
-  static double get screenHeight => Screen.screenHeight;
-  ///状态栏高度 dp 刘海屏会更高
-  static double get statusBarHeight => Screen.statusBarHeight;
-  /// 设置最大宽度
-  static setFullWidth() => MediaQuery.of(globalContext).size.width;
-  /// 设置最大高度
-  static setFullHeight() => MediaQuery.of(globalContext).size.height;
 
   /// showLoading
   static void showLoading() {
@@ -226,8 +226,6 @@ class Ksir {
     );
   }
 
-  /// nextPageIcon
-
   /// Image组件
   /// 
   /// 
@@ -382,4 +380,218 @@ class Ksir {
       ),
     );
   }
+
+  /// actionSheet
+  /// 
+  static void actionSheet(List<ActionSheetType> options) {
+    showModalBottomSheet(
+      context: globalContext,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(setSize(16)),
+          topRight: Radius.circular(setSize(16)),
+        )
+      ),
+      builder: (BuildContext context) {
+        return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          Container(
+            height: setSize(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(setSize(16)),
+                topRight: Radius.circular(setSize(16)),
+              )
+            ),
+          ),
+          for(var i = 0; i < options.length; i++) options[i].isShow??true ? MaterialButton(
+            onPressed: () {
+              (options[i].onTap??()=>{})();
+              if(Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
+            },
+            padding: EdgeInsets.all(0),
+            color: Colors.white,
+            child: Container(
+              height: setSize(90),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: i == options.length-1 ? Colors.transparent : Color(0xffe2e2e2),
+                    width: setSize(1)
+                  )
+                )
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                options[i].title??'',
+                style: TextStyle(
+                  fontSize: setSize(32),
+                  color: options[i].color??Color(0xff333333)
+                ),
+              ),
+            ),
+          ) : SizedBox(),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: setSize(20),
+            color: Color(0xfff8f8f8),
+          ),
+          MaterialButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            shape: BeveledRectangleBorder(
+              side: BorderSide(width: 0, color: Colors.transparent)
+            ),
+            color: Colors.white,
+            padding: EdgeInsets.all(0),
+            child: Container(
+              height: setSize(90),
+              alignment: Alignment.center,
+              child: Text(
+                '取消',
+                style: TextStyle(
+                  fontSize: setSize(32),
+                  color: Color(0xFF999999)
+                ),
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.white,
+            height: bottomBarHeight(),
+          )
+        ]
+      );
+    });
+  }
+
+  /// picker
+  /// 
+  static void picker({
+    @required List<String> options,
+    String title: '',
+    int defaultIndex: 0,
+    Function onChange,
+    Function onCancel,
+    Function onConfirm,
+    String cancelTitle: '取消',
+    String confirmTitle: '确认',
+    Color cancelColor,
+    Color confirmColor,
+    TextStyle optionTextStyle,
+    double optionsHeight: 300,
+    double optionHeight: 60,
+    bool closeAble: true,
+  }) {
+    int pickIndex = defaultIndex;
+    FixedExtentScrollController pickScrollCtr = new FixedExtentScrollController(initialItem: pickIndex);
+    // pickScrollCtrA.animateToItem(currentPosition, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+    showModalBottomSheet(
+      context: globalContext,
+      isScrollControlled: true,
+      isDismissible: closeAble,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(setSize(16)),
+          topRight: Radius.circular(setSize(16)),
+        )
+      ),
+      backgroundColor: Colors.white,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: setSize(40)),
+              height: setSize(100),
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(width: setSize(1), color: Color(0xffeaeaea), style: BorderStyle.solid))
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  closeAble ? GestureDetector(
+                    onTap: () {
+                      (onCancel??()=>{})();
+                      Navigator.pop(context);
+                    },
+                    child: Text(cancelTitle, style: TextStyle(color: confirmColor??Color(0xff999999), fontSize: setSize(28))),
+                  ) : SizedBox(width: setSize(60),),
+                  Text(title, style: TextStyle(fontSize: setSize(32), color: Color(0xff333333)),),
+                  GestureDetector(
+                    onTap: (){
+                      (onConfirm??()=> {})(pickIndex, options[pickIndex]);
+                      Navigator.pop(context);
+                    },
+                    child: Text(confirmTitle, style: TextStyle(color: cancelColor??Color(0xff459EF9), fontSize: setSize(28))),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: setSize(30),),
+            Container(
+              width: setFullWidth(),
+              constraints: BoxConstraints(
+                maxHeight: setFullHeight()/2
+              ),
+              padding: EdgeInsets.fromLTRB(setSize(40), setSize(0), setSize(40), setSize(0)),
+              child: ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          height: setSize(optionsHeight),
+                          child: CupertinoPicker(
+                            itemExtent: setSize(optionHeight),
+                            onSelectedItemChanged: (index) {
+                              pickIndex = index;
+                              (onChange??()=>{})(index, options[index]);
+                            },
+                            scrollController: pickScrollCtr,
+                            diameterRatio: 90.0,
+                            magnification: 1.0,
+                            offAxisFraction: 0,
+                            useMagnifier: true,
+                            looping: false,
+                            backgroundColor: Colors.white,
+                            children: <Widget>[
+                              for(int i = 0; i < options.length; i++) Container(
+                                alignment: Alignment.center,
+                                child: Text(options[i], style: optionTextStyle??TextStyle(fontSize: setSize(28), color: Color(0xff666666)),),
+                              ),
+                            ],
+                          )
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: bottomBarHeight(),)
+                ]
+              )
+            ),
+          ],
+        );
+      }
+    );
+  }
+}
+
+class ActionSheetType {
+  final String title;
+  final Function onTap;
+  final Color color;
+  final bool isShow;
+  ActionSheetType({@required this.title,  this.onTap, this.color, this.isShow});
 }
