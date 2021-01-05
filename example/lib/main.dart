@@ -127,16 +127,16 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.blue[200],
                   onPressed: () {
                     Ksir.picker(
-                      options: ['北京', '上海', '广州', '杭州', '北京', '上海', '广州', '杭州', '北京', '上海', '广州', '杭州', '北京', '上海', '广州', '杭州', '北京', '上海', '广州', '杭州', ], 
+                      options: [PickerType(label: '北京', value: '1'), PickerType(label: '广州', value: '2'), PickerType(label: '上海', value: '3'), PickerType(label: '杭州', value: '4')], 
                       title: '请选择',
                       optionHeight: 80,
                       optionTextStyle: TextStyle(fontSize: 14, color: Colors.blueAccent),
-                      defaultIndex: 3,
+                      defaultValue: '3',
                       onChange: (index, item) {
                         print('$index : $item');
                       },
                       onConfirm: (index, item) {
-                        print('$index : $item');
+                        print('$index : ${item.label} / ${item.value}');
                       }
                     );
                   },
