@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'dart:ui';
 
 class Screen {
@@ -41,7 +40,6 @@ class Screen {
   ///实际的dp与设计稿px的比例
   get scaleWidth => _screenWidth / instance.width;
   ///根据设计稿的设备宽度适配
-  ///高度也根据这个来做适配可以保证不变形
   sizeSet(double size) => size / scaleWidth;
   setSize(double size) => size * scaleWidth / _textScaleFactor;
 }

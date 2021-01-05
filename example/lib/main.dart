@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:ksir/ksir.dart';
+import 'package:ksir_example/adaptation.dart';
+import 'package:ksir_example/components.dart';
+import 'package:ksir_example/nextPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,33 +26,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _platformVersion = 'Unknown';
 
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await Ksir.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
   @override
   Widget build(BuildContext context) {
     Ksir.init(context, width: 750);
@@ -64,53 +40,52 @@ class _HomePageState extends State<HomePage> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Ksir.text(
-                  'Running on: $_platformVersion', 
-                  fontSize: 40, 
-                  fontWeight: 'bold', 
-                  color: Color(0xff333333), 
-                  lineHeight: 80, 
-                ),
                 MaterialButton(
-                  color: Colors.blue[200],
+                  minWidth: setSize(690),
+                  color: Color(0xff07c160),
                   onPressed: () {
                     Ksir.showModal('确认提交吗？');
                   },
-                  child: Ksir.text('showModal'),
+                  child: Ksir.text('showModal', color: Colors.white),
                 ),
                 MaterialButton(
-                  color: Colors.blue[200],
+                  minWidth: setSize(690),
+                  color: Color(0xff07c160),
                   onPressed: () {
                     Ksir.showMessage('账号不能为空！');
                   },
-                  child: Ksir.text('showMessage'),
+                  child: Ksir.text('showMessage', color: Colors.white),
                 ),
                 MaterialButton(
-                  color: Colors.blue[200],
+                  minWidth: setSize(690),
+                  color: Color(0xff07c160),
                   onPressed: () {
                     Ksir.showToast('提交成功！');
                   },
-                  child: Ksir.text('showToast success'),
+                  child: Ksir.text('showToast success', color: Colors.white),
                 ),
                 MaterialButton(
-                  color: Colors.blue[200],
+                  minWidth: setSize(690),
+                  color: Color(0xff07c160),
                   onPressed: () {
                     Ksir.showToast('提交失败！', isSuccess: false);
                   },
-                  child: Ksir.text('showToast fail'),
+                  child: Ksir.text('showToast fail', color: Colors.white),
                 ),
                 MaterialButton(
-                  color: Colors.blue[200],
+                  minWidth: setSize(690),
+                  color: Color(0xff07c160),
                   onPressed: () {
                     Ksir.showLoading();
                     Timer(Duration(seconds: 2), () {
                       Navigator.pop(context);
                     });
                   },
-                  child: Ksir.text('showLoading'),
+                  child: Ksir.text('showLoading', color: Colors.white),
                 ),
                 MaterialButton(
-                  color: Colors.blue[200],
+                  minWidth: setSize(690),
+                  color: Color(0xff07c160),
                   onPressed: () {
                     Ksir.actionSheet([
                       ActionSheetType(title: '修改', onTap: () {
@@ -121,10 +96,11 @@ class _HomePageState extends State<HomePage> {
                       }, color: Colors.red),
                     ]);
                   },
-                  child: Ksir.text('showAction'),
+                  child: Ksir.text('showAction', color: Colors.white),
                 ),
                 MaterialButton(
-                  color: Colors.blue[200],
+                  minWidth: setSize(690),
+                  color: Color(0xff07c160),
                   onPressed: () {
                     Ksir.picker(
                       options: [PickerType(label: '北京', value: '1'), PickerType(label: '广州', value: '2'), PickerType(label: '上海', value: '3'), PickerType(label: '杭州', value: '4')], 
@@ -140,21 +116,60 @@ class _HomePageState extends State<HomePage> {
                       }
                     );
                   },
-                  child: Ksir.text('showPicker'),
+                  child: Ksir.text('showPicker', color: Colors.white),
                 ),
-                Ksir.image('http://via.placeholder.com/350x150', width: 500, height: 500, fit: BoxFit.cover),
-                SizedBox(height: setSize(30),),
-                Ksir.avatar('http://via.placeholder.com/350x150', width: 200),
-                SizedBox(height: setSize(30),),
-                Ksir.nextPage(),
-                SizedBox(height: setSize(30),),
-                Ksir.goBack(context),
-                SizedBox(height: setSize(30),),
                 Container(
-                  width: setSize(600),
-                  height: setSize(450),
-                  color: Colors.blueGrey,
-                )
+                  width: setSize(690),
+                  height: setSize(100),
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(width: setSize(1), color: Color(0xffe8e8e8)))
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Ksir.text('下一页', fontSize: 32, color: Color(0xff666666)),
+                      Ksir.nextPage(onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => NextPage(),));
+                      })
+                    ],
+                  ),
+                ),
+                Container(
+                  width: setSize(690),
+                  height: setSize(100),
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(width: setSize(1), color: Color(0xffe8e8e8)))
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Ksir.text('适配方案', fontSize: 32, color: Color(0xff666666)),
+                      Ksir.nextPage(onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Adaptation(),));
+                      })
+                    ],
+                  ),
+                ),
+                Container(
+                  width: setSize(690),
+                  height: setSize(100),
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(width: setSize(1), color: Color(0xffe8e8e8)))
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Ksir.text('其他组件', fontSize: 32, color: Color(0xff666666)),
+                      Ksir.nextPage(onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Components(),));
+                      })
+                    ],
+                  ),
+                ),
+                SizedBox(height: setSize(30),),
               ],
             )
           ],
