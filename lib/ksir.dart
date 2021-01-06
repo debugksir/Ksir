@@ -86,9 +86,9 @@ class Ksir {
 
   /// showModal
   static void showModal(String title, {
-    Function comfirm,
+    Function confirm,
     Function cancel,
-    String comfirmTitle = '确认',
+    String confirmTitle = '确认',
     String cancelTitle = '取消'
   }) {
     showDialog(
@@ -150,10 +150,10 @@ class Ksir {
                       child: GestureDetector(
                         onTap: () {
                           Navigator.of(context).pop();
-                          if (comfirm != null) comfirm();
+                          if (confirm != null) confirm();
                         },
                         behavior: HitTestBehavior.opaque,
-                        child: Ksir.text(comfirmTitle, fontSize: 28, color: Color(0xff4499ff), textAlign: TextAlign.center)
+                        child: Ksir.text(confirmTitle, fontSize: 28, color: Color(0xff4499ff), textAlign: TextAlign.center)
                       )
                     ),
                   ],
@@ -272,7 +272,7 @@ class Ksir {
   /// 
   /// 
   static Widget avatar(String src, {
-    double width,
+    double width: 60,
   }) {
     return SizedBox(
       width: setSize(width),
@@ -291,8 +291,8 @@ class Ksir {
   static Widget text(String value, {
     double fontSize = 32,
     Color color = Colors.black,
-    dynamic fontWeight = 'normal',
-    double lineHeight = 32,
+    String fontWeight = 'normal',
+    double lineHeight = 1.2,
     TextAlign textAlign = TextAlign.left,
     TextOverflow overflow = TextOverflow.ellipsis,
     int maxLines,
@@ -330,7 +330,7 @@ class Ksir {
           fontSize: setSize(fontSize),
           fontWeight: matchFontWeight['$fontWeight'],
           color: color,
-          height: lineHeight/fontSize,
+          height: lineHeight,
         ),
         textAlign: textAlign,
       );
@@ -488,7 +488,7 @@ class Ksir {
   static void picker({
     @required List<PickerType> options,
     String title: '',
-    dynamic defaultValue: 0,
+    dynamic defaultValue,
     Function onChange,
     Function onCancel,
     Function onConfirm,

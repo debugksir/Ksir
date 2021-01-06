@@ -9,7 +9,7 @@ class Components extends StatelessWidget {
   final demo02 = 
   '''
   Ksir.image('http://via.placeholder.com/350x150', width: 500, height: 500, fit: BoxFit.cover),
-  图片组件自动识别asset和network类型， 当传入src是以http开头时判定为network类型,否则为asset类型。暂不支持file类型
+  图片组件使用cached_network_image插件缓存图片，节省用户请求，同时自动识别asset和network图片类型，当传入src是以http开头时判定为network类型,否则为asset类型。暂不支持file类型
   ''';
   final demo03 = 
   '''
@@ -33,7 +33,10 @@ class Components extends StatelessWidget {
             children: <Widget>[
               Ksir.text('为了节省代码，更加符合css编写习惯，对文字和图片组件进行了封装，使用如下：', lineHeight: 48),
               SizedBox(height: setSize(60),),
-              Ksir.text('好好学习，天天向上！', fontSize: 48, color: Colors.black, fontWeight: 'bold', textAlign: TextAlign.right),
+              Container(
+                width: setFullWidth(),
+                child: Ksir.text('好好学习，天天向上！', fontSize: 48, color: Colors.black, fontWeight: 'bold', textAlign: TextAlign.right),
+              ),
               Ksir.text(demo01, lineHeight: 48),
               SizedBox(height: setSize(60),),
               Ksir.image('http://via.placeholder.com/350x150', width: 500, height: 500, fit: BoxFit.cover),
