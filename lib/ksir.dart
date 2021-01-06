@@ -30,9 +30,9 @@ screenHeight() => Screen.screenHeight;
 ///状态栏高度 dp 刘海屏会更高
 statusBarHeight() => Screen.statusBarHeight;
 /// 设置最大宽度
-setFullWidth() => MediaQuery.of(globalContext).size.width;
+setFullWidth(context) => MediaQuery.of(context).size.width;
 /// 设置最大高度
-setFullHeight() => MediaQuery.of(globalContext).size.height;
+setFullHeight(context) => MediaQuery.of(context).size.height;
 
 BuildContext globalContext;
 class Ksir {
@@ -120,7 +120,7 @@ class Ksir {
                 ),
                 width: 280,
                 padding: EdgeInsets.fromLTRB(16, 20, 16, 16),
-                child: Ksir.text(title, fontSize: 32, color: Color(0xff333333), textAlign: TextAlign.center, lineHeight: 48)  
+                child: Ksir.text(title, fontSize: 32, color: Color(0xff333333), textAlign: TextAlign.center, lineHeight: 1.2)  
               ),
               Container(
                 height: 44,
@@ -317,7 +317,7 @@ class Ksir {
           fontSize: setSize(fontSize),
           fontWeight: matchFontWeight['$fontWeight'],
           color: color,
-          height: lineHeight/fontSize,
+          height: lineHeight,
         ),
         textAlign: textAlign,
         maxLines: maxLines,
@@ -560,9 +560,9 @@ class Ksir {
             ),
             SizedBox(height: setSize(30),),
             Container(
-              width: setFullWidth(),
+              width: setFullWidth(context),
               constraints: BoxConstraints(
-                maxHeight: setFullHeight()/2
+                maxHeight: setFullHeight(context)/2
               ),
               padding: EdgeInsets.fromLTRB(setSize(40), setSize(0), setSize(40), setSize(0)),
               child: ListView(
