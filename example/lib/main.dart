@@ -12,7 +12,6 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Ksir.init(context, width: 750);
     return MaterialApp(
       title: 'Welcome to Flutter',
       debugShowCheckedModeBanner: false,
@@ -30,6 +29,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Ksir.init(context, width: 750);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(

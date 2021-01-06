@@ -28,7 +28,7 @@ class Adaptation extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Ksir.text('默认以750px设计为准, 如果需要自定义，可以在初始化的时候指定， 如设计稿宽度375：Ksir.init(context, width: 375); 推荐设置750px，以下Demo以750为例。', lineHeight: 48),
+              Ksir.text('默认以750px设计为准, 如果需要自定义，可以在初始化的时候指定， 如设计稿宽度375：Ksir.init(context, width: 375); 推荐设置750px，以下Demo以750为例。', lineHeight: 1.2),
               SizedBox(height: setSize(30),),
               Container(
                 width: setSize(690),
