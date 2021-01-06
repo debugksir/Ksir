@@ -250,8 +250,8 @@ class Ksir {
   /// 
   /// 
   static Widget image(String src, {
-    double width,
-    double height,
+    double width:300,
+    double height:300,
     BoxFit fit,
   }) {
     if(src.startsWith('http')) {
@@ -261,10 +261,10 @@ class Ksir {
         errorWidget: (context, url, error) => Icon(Icons.error),
         width: setSize(width),
         height: setSize(height),
-        fit: fit,
+        fit: fit??BoxFit.cover,
       );
     }else {
-      return Image(image: AssetImage(src), width: setSize(width), height: setSize(height), fit: BoxFit.cover,);
+      return Image(image: AssetImage(src), width: setSize(width), height: setSize(height), fit: fit??BoxFit.cover,);
     }
   }
 
